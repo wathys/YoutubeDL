@@ -1,5 +1,5 @@
 # YoutubeDL
-Téléchargeur YouTube
+Scrip pour installer des vidéo youtube en haute qualité.
 
 Pour utiliser l'application, lancez `YoutubeDL`.
 
