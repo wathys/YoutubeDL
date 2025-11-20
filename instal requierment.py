@@ -57,7 +57,7 @@ def installer_requirment():
             app = QApplication.instance() or QApplication([])
             desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
             shortcut_path = os.path.join(desktop, 'YoutubeDL.lnk')
-            script_path = os.path.join(script_dir, 'YoutubeDL.py')
+            script_path = os.path.join(script_dir, 'YoutubeDL.pyw')
             # Toujours demander à l'utilisateur, même si le raccourci existe déjà
             if os.path.exists(shortcut_path):
                 msg = "Un raccourci YoutubeDL existe déjà sur le bureau. Voulez-vous le remplacer ?"
