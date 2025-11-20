@@ -1,4 +1,4 @@
-# App-multi-fonction
+# YoutubeDL
 Téléchargeur YouTube
 
 Pour utiliser l'application, lancez `YoutubeDL`.
