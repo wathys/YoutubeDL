@@ -251,13 +251,22 @@ class MainWindow(QWidget):
         choice = item.get_choice()
         outtmpl = os.path.join(dated_dir, '%(title)s.%(ext)s')
         cmd = [sys.executable, '-m', 'yt_dlp', link, '-o', outtmpl, '--progress']
+        
         is_video = choice['type'] == 'video' and choice['quality'] != 'audio'
+        
         if choice['type'] == 'audio':
             cmd += ['-f', 'bestaudio[ext=m4a]/bestaudio/best', '--extract-audio', '--audio-format', 'mp3']
         elif is_video:
-            cmd += ['-f', f'bestvideo[height<={choice["quality"]}]+bestaudio/best[height<={choice["quality"]}]']
+            # Format pour vidéo : choisir la qualité et forcer le format mp4
+            quality = choice['quality']
+            cmd += ['-f', f'bestvideo[height<={quality}][ext=mp4]+bestaudio[ext=m4a]/best[height<={quality}]/best',
+                   '--merge-output-format', 'mp4']
+        else:
+            # Fallback pour audio
+            cmd += ['-f', 'bestaudio[ext=m4a]/bestaudio/best', '--extract-audio', '--audio-format', 'mp3']
+            
         try:
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8', errors='replace')
             item.set_proc(proc)
             filename = None
             for line in proc.stdout:
@@ -271,24 +280,13 @@ class MainWindow(QWidget):
                     m2 = re.search(r'Destination: (.+)', line)
                     if m2:
                         filename = m2.group(1).strip()
+                        
             proc.wait()
             item.set_cancel_enabled(False)
             item.set_progress(100)
-            # Conversion en mp4 si possible (si vidéo et pas déjà mp4)
-            if is_video and filename and not filename.lower().endswith('.mp4'):
-                mp4_name = os.path.splitext(filename)[0] + '.mp4'
-                try:
-                    ffmpeg_cmd = [
-                        'ffmpeg', '-y', '-i', filename, '-c:v', 'copy', '-c:a', 'copy', mp4_name
-                    ]
-                    subprocess.run(ffmpeg_cmd, check=True)
-                    # Optionnel : supprimer l'ancien fichier si conversion réussie
-                    if os.path.exists(mp4_name):
-                        os.remove(filename)
-                except Exception as e:
-                    QMessageBox.warning(self, 'Conversion mp4', f'Impossible de convertir en mp4 : {e}')
+            
         except Exception as e:
-            QMessageBox.critical(self, 'Erreur', f'Erreur pour {link} : {e}')
+            QMessageBox.critical(None, 'Erreur', f'Erreur pour {link} : {e}')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
