@@ -1,9 +1,9 @@
 # YoutubeDL
-Script pour installer des vidéo youtube en haute qualité.
+Script pour télécharger des vidéo youtube en haute qualité.
 
-Pour utiliser l'application, lancez `YoutubeDL`.
+Pour utiliser le script, lancez `YoutubeDL.pyw`.
 
-Applications requises (voir `requirements.txt`) :
+logiciels requises (voir `requirements.txt`) :
 - yt-dlp
 - ffmpeg-python
 - requests
