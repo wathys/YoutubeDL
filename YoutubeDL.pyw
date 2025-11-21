@@ -25,7 +25,7 @@ class VideoItem(QWidget):
                 pixmap = QPixmap()
                 pixmap.loadFromData(response.content)
                 thumb_label = QLabel()
-                thumb_label.setPixmap(pixmap.scaled(120, 90, Qt.KeepAspectRatio))
+                thumb_label.setPixmap(pixmap.scaled(384, 216, Qt.KeepAspectRatio))
                 layout.addWidget(thumb_label)
             except Exception:
                 layout.addWidget(QLabel('(miniature indisponible)'))
@@ -137,7 +137,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Téléchargement multi-vidéos')
-        self.resize(700, 400)
+        self.resize(780, 450)
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.url_edit = QLineEdit()
